@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "961895600354",
+    "firebase_url": "https://cimatecmovie-96707-default-rtdb.firebaseio.com",
+    "project_id": "cimatecmovie-96707",
+    "storage_bucket": "cimatecmovie-96707.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:961895600354:android:2b64bdcbba43afc9e68ebb",
+        "android_client_info": {
+          "package_name": "br.com.application.cimatecmovieapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "961895600354-3f3ktckhmas7mip806scdbm9469qtpd9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.application.cimatecmovieapplication",
+            "certificate_hash": "2d08b23292502cb80f25e72a50996f35e4a67f4b"
+          }
+        },
+        {
+          "client_id": "961895600354-rbl069tjaia9idj6abld4dsfkpgrq1ve.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFQ9Q4GepSZf0PCkqvy7zO--tfS4lCwrg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "961895600354-rbl069tjaia9idj6abld4dsfkpgrq1ve.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

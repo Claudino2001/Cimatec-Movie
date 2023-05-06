@@ -8,7 +8,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class MainActivity extends AppCompatActivity {
+
+    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
     public TextView btnCriarConta;
 
@@ -21,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
 
         btnCriarConta = (TextView) findViewById(R.id.btnCriarConta);
         btLogin = (Button) findViewById(R.id.btLogin);
+
+        //Criando um novo nó
+        reference.child("Permissoes").setValue("all");
 
         btnCriarConta.setOnClickListener(new View.OnClickListener() {
             @Override
