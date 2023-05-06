@@ -1,5 +1,6 @@
 package br.com.application.cimatecmovieapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -7,13 +8,28 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class MainActivity extends AppCompatActivity {
 
     private DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+    private DatabaseReference usuarios = reference.child("Usuarios");
+
+//    // Create a reference to the cities collection
+//    CollectionReference citiesRef = db.collection("cities");
+//    // Create a query against the collection.
+//    Query query = citiesRef.whereEqualTo("state", "CA");
+
 
     public TextView btnCriarConta;
 
@@ -40,9 +56,15 @@ public class MainActivity extends AppCompatActivity {
         btLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, tela_menu.class));
+                validarLogin();
+                //startActivity(new Intent(MainActivity.this, tela_menu.class));
             }
         });
 
     }
+
+    void validarLogin(){
+
+    }
+
 }
