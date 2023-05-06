@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Cimatec Movie</string>
+    <string name="type_your_ra">Type your R.A.</string>
+    <string name="login">Login</string>
+    <string name="create_a_new_account">Create a new account</string>
+    <string name="title_main_screen">Welcome to\nCimatec Movie</string>
+    <string name="your_name">Your name</string>
+    <string name="create">Create</string>
+    <string name="title_menu_screen">MENU</string>
+    <string name="my_playList">My PlayList</string>
+    <string name="search_playLists">Search PlayLists</string>
+</resources>
