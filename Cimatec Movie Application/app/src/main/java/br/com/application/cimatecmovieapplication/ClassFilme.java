@@ -4,13 +4,13 @@ import android.widget.ImageView;
 
 public class ClassFilme {
 
-    int id;
-    int cartaz;
-    String titulo;
-    String classificacao;
-    String ano;
-    String genero;
-    int curtidas;
+    private int id;
+    private int cartaz;
+    private String titulo;
+    private String classificacao;
+    private String ano;
+    private String genero;
+    private int curtidas;
 
     public ClassFilme(int id, int cartaz, String titulo, String classificacao, String ano, String genero, int curtidas) {
         this.id = id;

@@ -46,8 +46,3 @@ public class AdapterTupla_Filmes extends ArrayAdapter<ClassFilme> {
     }
 }
 
-//        TextView txt_apelido = (TextView) rowView.findViewById(R.id.txt_apelido);
-//        TextView txt_divida_total = (TextView) rowView.findViewById(R.id.txt_divida_total);
-//
-//        txt_apelido.setText(filmes.get(position).getNome());
-//        txt_divida_total.setText(String.valueOf(valorFormatado));
