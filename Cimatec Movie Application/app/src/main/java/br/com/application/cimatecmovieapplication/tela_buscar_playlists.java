@@ -31,7 +31,7 @@ public class tela_buscar_playlists extends AppCompatActivity {
 
     void listar(){
         for(int i = 0; i<10; i++){
-            ClassPlayList p = new ClassPlayList(i, i, "O Cu do Poder", "Gabriel Claudino", 10, R.drawable.ic_playlists);
+            ClassPlayList p = new ClassPlayList("Nome da PlayList", "Gabriel Claudino", null, 10);
             playLists.add(p);
         }
 

@@ -26,6 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,10 +63,7 @@ public class create_a_new_account extends AppCompatActivity {
                 }
             }
         });
-
-
     }
-
 
     private class MinhaAsyncTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -118,6 +116,8 @@ public class create_a_new_account extends AppCompatActivity {
         user.put("nome", _name);
         user.put("ra", _ra);
 
+        HashMap x = new HashMap<>();
+
         // Add a new document with a generated ID
         db.collection("Usuarios")
                 .add(user)
@@ -125,6 +125,23 @@ public class create_a_new_account extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+
+                        // Create a new collection "Notas" inside the new user document
+                        documentReference.collection("PlayList")
+                                .document("MinhaPlayList")
+                                .set(new ClassPlayList("PlayList Foda", documentReference.getId().toString(), null, 10))
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "New note created for user " + documentReference.getId());
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error adding note", e);
+                                    }
+                                });
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -133,8 +150,18 @@ public class create_a_new_account extends AppCompatActivity {
                         Log.w(TAG, "Error adding document", e);
                     }
                 });
+
         inputName.setText("");
         inputRA.setText("");
+    }
+
+    public ArrayList<String> lista_de_filmes(){
+        ArrayList<String> strings = new ArrayList<String>();
+        strings.add("filme 1");
+        strings.add("filme 2");
+        strings.add("filme 3");
+        strings.add("filme 4");
+        return strings;
     }
 
 }

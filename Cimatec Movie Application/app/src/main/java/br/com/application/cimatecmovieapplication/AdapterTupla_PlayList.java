@@ -33,8 +33,8 @@ public class AdapterTupla_PlayList extends ArrayAdapter<ClassPlayList> {
         TextView curtidas = (TextView) rowView.findViewById(R.id.textCurtidas);
         //Button btnLike = (Button) rowView.findViewById(R.id.btnLike);
 
-        cartaz.setImageResource(playlists.get(position).getImg());
-        titulo.setText(playlists.get(position).getTitulo());
+        //cartaz.setImageResource(playlists.get(position).getImg());
+        titulo.setText(playlists.get(position).getNome_playlist());
         autor.setText(playlists.get(position).getAutor());
         curtidas.setText(playlists.get(position).getCurtidas() + " curtidas");
 

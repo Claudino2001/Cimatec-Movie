@@ -1,48 +1,30 @@
 package br.com.application.cimatecmovieapplication;
 
+import java.util.ArrayList;
+
 public class ClassPlayList {
 
-    private int id;
-    private int id_criador;
-    private String titulo;
+    private String nome_playlist;
     private String autor;
+    private ArrayList<ClassFilme> filmes;
     private int curtidas;
-    private int img;
 
     public ClassPlayList() {
     }
 
-    public ClassPlayList(int id, int id_criador, String titulo, String autor, int curtidas, int img) {
-        this.id = id;
-        this.id_criador = id_criador;
-        this.titulo = titulo;
+    public ClassPlayList(String nome_playlist, String autor, ArrayList<ClassFilme> filmes, int curtidas) {
+        this.nome_playlist = nome_playlist;
         this.autor = autor;
+        this.filmes = filmes;
         this.curtidas = curtidas;
-        this.img = img;
     }
 
-    public int getId() {
-        return id;
+    public String getNome_playlist() {
+        return nome_playlist;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getId_criador() {
-        return id_criador;
-    }
-
-    public void setId_criador(int id_criador) {
-        this.id_criador = id_criador;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
+    public void setNome_playlist(String nome_playlist) {
+        this.nome_playlist = nome_playlist;
     }
 
     public String getAutor() {
@@ -53,19 +35,19 @@ public class ClassPlayList {
         this.autor = autor;
     }
 
+    public ArrayList<ClassFilme> getFilmes() {
+        return filmes;
+    }
+
+    public void setFilmes(ArrayList<ClassFilme> filmes) {
+        this.filmes = filmes;
+    }
+
     public int getCurtidas() {
         return curtidas;
     }
 
     public void setCurtidas(int curtidas) {
         this.curtidas = curtidas;
-    }
-
-    public int getImg() {
-        return img;
-    }
-
-    public void setImg(int img) {
-        this.img = img;
     }
 }
