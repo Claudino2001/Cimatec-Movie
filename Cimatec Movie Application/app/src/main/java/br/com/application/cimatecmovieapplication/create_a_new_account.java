@@ -1,28 +1,46 @@
 package br.com.application.cimatecmovieapplication;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class create_a_new_account extends AppCompatActivity {
 
     private DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference usuarios = reference.child("Usuarios");
+
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     public EditText inputName, inputRA;
     public Button btCreate;
     int id_user_bd;
+
+    String _ra, _name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,38 +54,87 @@ public class create_a_new_account extends AppCompatActivity {
         btCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cadastrar();
+                _ra = inputRA.getText().toString();
+                _name = inputName.getText().toString();
+                if(!TextUtils.isEmpty(_ra) && !TextUtils.isEmpty(_name)){
+                    MinhaAsyncTask task = new MinhaAsyncTask();
+                    task.execute();
+                }
             }
         });
 
-        usuarios.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                System.out.println(">>> id_user_firebase: " + snapshot.child("id_user").getValue().toString());
-                id_user_bd = Integer.parseInt(snapshot.child("id_user").getValue().toString());
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(create_a_new_account.this, "Falha de conexão: " + error, Toast.LENGTH_SHORT).show();
-            }
-        });
 
     }
 
-    void cadastrar(){
-        id_user_bd = id_user_bd + 1;
-        Usuario u = new Usuario();
-        if(!TextUtils.isEmpty(inputName.getText().toString()) && !TextUtils.isEmpty(inputRA.getText().toString())){
-            u.setId(id_user_bd);
-            u.setNome(inputName.getText().toString());
-            u.setRa(inputRA.getText().toString());
-            usuarios.child(String.valueOf(id_user_bd)).setValue(u);
-            usuarios.child("id_user").setValue(String.valueOf(id_user_bd));
-            inputName.setText("");
-            inputRA.setText("");
-        }else{
-            Toast.makeText(this, "Preencha ambos os campos.", Toast.LENGTH_SHORT).show();
+
+    private class MinhaAsyncTask extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            // Faça a chamada à API ou busca de dados aqui
+            // e use a Task do Firebase para aguardar a resposta
+            //Task<AlgumTipoDeDados> task = api.getDados();
+
+            try {
+                Task<QuerySnapshot> task = db.collection("Usuarios")
+                        .whereEqualTo("ra", _ra)
+                        .get();
+
+                QuerySnapshot querySnapshot = Tasks.await(task);
+                System.out.println("isso: "+querySnapshot.toString());
+                boolean raExiste = !querySnapshot.isEmpty();
+
+                return raExiste;
+            } catch (Exception e) {
+                // Trate o caso em que a API falha em obter os dados
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean resultado) {
+            // Use o resultado da função aqui
+//            if (resultado) {
+//                System.out.println(">>>> " + resultado);
+//                // RA já existe
+//            } else {
+//                System.out.println(">>>> " + resultado);
+//                // RA não existe
+//            }
+
+            if(resultado){
+                Toast.makeText(create_a_new_account.this, "R.A. ja cadastrado.", Toast.LENGTH_SHORT).show();
+            }else{
+                cadastrar();
+                Toast.makeText(create_a_new_account.this, "Cadastrado com sucesso.", Toast.LENGTH_SHORT).show();
+            }
+
         }
     }
+
+    public void cadastrar(){
+        // Create a new user with a first and last name
+        Map<String, Object> user = new HashMap<>();
+        user.put("nome", _name);
+        user.put("ra", _ra);
+
+        // Add a new document with a generated ID
+        db.collection("Usuarios")
+                .add(user)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
+        inputName.setText("");
+        inputRA.setText("");
+    }
+
 }
