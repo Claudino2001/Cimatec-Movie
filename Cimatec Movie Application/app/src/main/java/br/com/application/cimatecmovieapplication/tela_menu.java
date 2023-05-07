@@ -6,10 +6,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class tela_menu extends AppCompatActivity {
 
     public Button btMyPlayList, btSearchPlayLists;
+    public TextView txtTituloMenu;
+
+    String key_user, name_user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +22,15 @@ public class tela_menu extends AppCompatActivity {
 
         btMyPlayList = (Button) findViewById(R.id.btMyPlayList);
         btSearchPlayLists = (Button) findViewById(R.id.btSearchPlayLists);
+        txtTituloMenu = (TextView) findViewById(R.id.txtTituloMenu);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            key_user = extras.getString("key_user");
+            name_user = extras.getString("name_user");
+        }
+
+        txtTituloMenu.setText("Bem-vindo(a), " + name_user);
 
         btMyPlayList.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -22,7 +22,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/tituloa_"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -32,6 +32,17 @@
             android:textColor="@color/white"
             android:textSize="48sp"
             android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtTituloMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:text="@string/title_menu_screen"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="24sp" />
 
         <Button
             android:id="@+id/btMyPlayList"
