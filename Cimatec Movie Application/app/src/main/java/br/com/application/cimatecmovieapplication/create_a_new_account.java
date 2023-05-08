@@ -28,6 +28,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class create_a_new_account extends AppCompatActivity {
@@ -111,12 +112,25 @@ public class create_a_new_account extends AppCompatActivity {
     }
 
     public void cadastrar(){
+        //Criano uma List de filmes de exemplo
+        List<ClassFilme> filmes = new ArrayList<>();
+        filmes.add(new ClassFilme(1, 1, "titulo", "30 anos", "2932890", "genero", 876));
+        filmes.add(new ClassFilme(2, 1, "titulo", "30 anos", "2932890", "genero", 876));
+        filmes.add(new ClassFilme(3, 1, "titulo", "30 anos", "2932890", "genero", 876));
+        filmes.add(new ClassFilme(4, 1, "titulo", "30 anos", "2932890", "genero", 876));
+
+        //criando PlayList Vazia/padrão
+        //DocumentReference referenceAutor = db.collection("Usuario").document().
+        //ClassPlayList playList = new ClassPlayList("Nome dessa merda", "Autor dessa merda", filmes, 20);
+
+        Map<String, Object> playL = new HashMap<>();
+        //playL.put("Minha playlist", playList);
+
+
         // Create a new user with a first and last name
         Map<String, Object> user = new HashMap<>();
         user.put("nome", _name);
         user.put("ra", _ra);
-
-        HashMap x = new HashMap<>();
 
         // Add a new document with a generated ID
         db.collection("Usuarios")
@@ -129,7 +143,7 @@ public class create_a_new_account extends AppCompatActivity {
                         // Create a new collection "Notas" inside the new user document
                         documentReference.collection("PlayList")
                                 .document("MinhaPlayList")
-                                .set(new ClassPlayList("PlayList Foda", documentReference.getId().toString(), null, 10))
+                                .set(playL)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
@@ -155,13 +169,5 @@ public class create_a_new_account extends AppCompatActivity {
         inputRA.setText("");
     }
 
-    public ArrayList<String> lista_de_filmes(){
-        ArrayList<String> strings = new ArrayList<String>();
-        strings.add("filme 1");
-        strings.add("filme 2");
-        strings.add("filme 3");
-        strings.add("filme 4");
-        return strings;
-    }
 
 }

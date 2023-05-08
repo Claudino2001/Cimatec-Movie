@@ -1,18 +1,23 @@
 package br.com.application.cimatecmovieapplication;
 
+import com.google.firebase.firestore.DocumentReference;
+
+import org.w3c.dom.Document;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class ClassPlayList {
 
     private String nome_playlist;
     private String autor;
-    private ArrayList<ClassFilme> filmes;
+    private List<ClassFilme> filmes;
     private int curtidas;
 
     public ClassPlayList() {
     }
 
-    public ClassPlayList(String nome_playlist, String autor, ArrayList<ClassFilme> filmes, int curtidas) {
+    public ClassPlayList(String nome_playlist, String autor, List<ClassFilme> filmes, int curtidas) {
         this.nome_playlist = nome_playlist;
         this.autor = autor;
         this.filmes = filmes;
@@ -35,11 +40,11 @@ public class ClassPlayList {
         this.autor = autor;
     }
 
-    public ArrayList<ClassFilme> getFilmes() {
+    public List<ClassFilme> getFilmes() {
         return filmes;
     }
 
-    public void setFilmes(ArrayList<ClassFilme> filmes) {
+    public void setFilmes(List<ClassFilme> filmes) {
         this.filmes = filmes;
     }
 
