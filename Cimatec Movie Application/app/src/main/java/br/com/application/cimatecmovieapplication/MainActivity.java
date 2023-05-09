@@ -35,10 +35,10 @@ public class MainActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public TextView btnCriarConta;
-    public EditText inputRA;
+    public EditText inputRA, inputNome, inputSenha2;
     public Button btLogin;
 
-    String _ra;
+    String _ra, _name, _senha;
     String key_user;
     String name_user;
 
@@ -49,7 +49,9 @@ public class MainActivity extends AppCompatActivity {
 
         btnCriarConta = (TextView) findViewById(R.id.btnCriarConta);
         btLogin = (Button) findViewById(R.id.btLogin);
-        inputRA = (EditText) findViewById(R.id.inputRA);
+        //inputRA = (EditText) findViewById(R.id.inputRA);
+        inputNome = (EditText) findViewById(R.id.inputNome);
+        inputSenha2 = (EditText) findViewById(R.id.inputSenha2);
 
         btnCriarConta.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,8 +63,10 @@ public class MainActivity extends AppCompatActivity {
         btLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                _ra = inputRA.getText().toString();
-                if(!TextUtils.isEmpty(_ra)){
+                //_ra = inputRA.getText().toString();
+                _name = inputNome.getText().toString();
+                _senha = inputSenha2.getText().toString();
+                if(/*!TextUtils.isEmpty(_ra) && */!TextUtils.isEmpty(_name) && !TextUtils.isEmpty(_senha)){
                     MinhaAsyncTask task = new MinhaAsyncTask();
                     task.execute();
                 }
@@ -81,7 +85,8 @@ public class MainActivity extends AppCompatActivity {
 
             try {
                 Task<QuerySnapshot> task = db.collection("Usuarios")
-                        .whereEqualTo("ra", _ra)
+                        .whereEqualTo("nome", _name)
+                        .whereEqualTo("senha", _senha)
                         .get();
 
                 QuerySnapshot querySnapshot = Tasks.await(task);
