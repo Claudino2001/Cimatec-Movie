@@ -1,6 +1,8 @@
 package br.com.application.cimatecmovieapplication;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +10,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class AdapterTupla_Filmes extends ArrayAdapter<ClassFilme> {
@@ -27,20 +35,27 @@ public class AdapterTupla_Filmes extends ArrayAdapter<ClassFilme> {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.tupla_filme, parent, false);
+
         ImageView cartaz = (ImageView) rowView.findViewById(R.id.imgCartaz);
         TextView titulo = (TextView) rowView.findViewById(R.id.textTitulo);
         TextView classificacao = (TextView) rowView.findViewById(R.id.txtClassificacao);
         TextView ano = (TextView) rowView.findViewById(R.id.textAno);
         TextView genero = (TextView) rowView.findViewById(R.id.textGenero);
-        TextView numLike = (TextView) rowView.findViewById(R.id.textNumLike);
-        //Button btnLike = (Button) rowView.findViewById(R.id.btnLike);
 
-        cartaz.setImageResource(filmes.get(position).getCartaz());
+        URL url;
+        try {
+            url = new URL(filmes.get(position).url_cartaz);
+        } catch (MalformedURLException e) {
+            Toast.makeText(context, "erro: img" + position, Toast.LENGTH_SHORT).show();
+            throw new RuntimeException(e);
+        }
+        //GITHUB
+        Glide.with(context).load(url).into(cartaz);
+
         titulo.setText(filmes.get(position).getTitulo());
         classificacao.setText(filmes.get(position).getClassificacao());
-        ano.setText(filmes.get(position).getAno());
+        ano.setText(String.valueOf(filmes.get(position).getAno()));
         genero.setText(filmes.get(position).getGenero());
-        numLike.setText(filmes.get(position).getCurtidas() + " curtidas");
 
         return rowView;
     }

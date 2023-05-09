@@ -22,11 +22,13 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,9 +72,6 @@ public class create_a_new_account extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            // Faça a chamada à API ou busca de dados aqui
-            // e use a Task do Firebase para aguardar a resposta
-            //Task<AlgumTipoDeDados> task = api.getDados();
 
             try {
                 Task<QuerySnapshot> task = db.collection("Usuarios")
@@ -92,45 +91,22 @@ public class create_a_new_account extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Boolean resultado) {
-            // Use o resultado da função aqui
-//            if (resultado) {
-//                System.out.println(">>>> " + resultado);
-//                // RA já existe
-//            } else {
-//                System.out.println(">>>> " + resultado);
-//                // RA não existe
-//            }
-
             if(resultado){
                 Toast.makeText(create_a_new_account.this, "R.A. ja cadastrado.", Toast.LENGTH_SHORT).show();
             }else{
                 cadastrar();
-                Toast.makeText(create_a_new_account.this, "Cadastrado com sucesso.", Toast.LENGTH_SHORT).show();
             }
 
         }
     }
 
     public void cadastrar(){
-        //Criano uma List de filmes de exemplo
-        List<ClassFilme> filmes = new ArrayList<>();
-        filmes.add(new ClassFilme(1, 1, "titulo", "30 anos", "2932890", "genero", 876));
-        filmes.add(new ClassFilme(2, 1, "titulo", "30 anos", "2932890", "genero", 876));
-        filmes.add(new ClassFilme(3, 1, "titulo", "30 anos", "2932890", "genero", 876));
-        filmes.add(new ClassFilme(4, 1, "titulo", "30 anos", "2932890", "genero", 876));
-
-        //criando PlayList Vazia/padrão
-        //DocumentReference referenceAutor = db.collection("Usuario").document().
-        //ClassPlayList playList = new ClassPlayList("Nome dessa merda", "Autor dessa merda", filmes, 20);
-
-        Map<String, Object> playL = new HashMap<>();
-        //playL.put("Minha playlist", playList);
-
-
-        // Create a new user with a first and last name
         Map<String, Object> user = new HashMap<>();
         user.put("nome", _name);
         user.put("ra", _ra);
+        user.put("curtidas", 0);
+        user.put("playlist", Arrays.asList());
+        user.put("data_cadastro", FieldValue.serverTimestamp());
 
         // Add a new document with a generated ID
         db.collection("Usuarios")
@@ -139,23 +115,6 @@ public class create_a_new_account extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-
-                        // Create a new collection "Notas" inside the new user document
-                        documentReference.collection("PlayList")
-                                .document("MinhaPlayList")
-                                .set(playL)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Log.d(TAG, "New note created for user " + documentReference.getId());
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.w(TAG, "Error adding note", e);
-                                    }
-                                });
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -167,6 +126,8 @@ public class create_a_new_account extends AppCompatActivity {
 
         inputName.setText("");
         inputRA.setText("");
+        finish();
+        Toast.makeText(create_a_new_account.this, "Cadastrado com sucesso.", Toast.LENGTH_SHORT).show();
     }
 
 

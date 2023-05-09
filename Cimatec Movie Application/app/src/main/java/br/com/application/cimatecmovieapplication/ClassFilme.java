@@ -4,38 +4,30 @@ import android.widget.ImageView;
 
 public class ClassFilme {
 
-    private int id;
-    private int cartaz;
-    private String titulo;
-    private String classificacao;
-    private String ano;
-    private String genero;
-    private int curtidas;
+    String _id;
+    String titulo;
+    String url_cartaz;
+    String genero;
+    String classificacao;
+    double ano;
 
-    public ClassFilme(int id, int cartaz, String titulo, String classificacao, String ano, String genero, int curtidas) {
-        this.id = id;
-        this.cartaz = cartaz;
+    public ClassFilme() {
+    }
+
+    public ClassFilme(String titulo, String url_cartaz, String genero, String classificacao, double ano) {
         this.titulo = titulo;
+        this.url_cartaz = url_cartaz;
+        this.genero = genero;
         this.classificacao = classificacao;
         this.ano = ano;
-        this.genero = genero;
-        this.curtidas = curtidas;
     }
 
-    public int getId() {
-        return id;
+    public String get_id() {
+        return _id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getCartaz() {
-        return cartaz;
-    }
-
-    public void setCartaz(int cartaz) {
-        this.cartaz = cartaz;
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
     public String getTitulo() {
@@ -46,20 +38,12 @@ public class ClassFilme {
         this.titulo = titulo;
     }
 
-    public String getClassificacao() {
-        return classificacao;
+    public String getUrl_cartaz() {
+        return url_cartaz;
     }
 
-    public void setClassificacao(String classificacao) {
-        this.classificacao = classificacao;
-    }
-
-    public String getAno() {
-        return ano;
-    }
-
-    public void setAno(String ano) {
-        this.ano = ano;
+    public void setUrl_cartaz(String url_cartaz) {
+        this.url_cartaz = url_cartaz;
     }
 
     public String getGenero() {
@@ -70,11 +54,19 @@ public class ClassFilme {
         this.genero = genero;
     }
 
-    public int getCurtidas() {
-        return curtidas;
+    public String getClassificacao() {
+        return classificacao;
     }
 
-    public void setCurtidas(int curtidas) {
-        this.curtidas = curtidas;
+    public void setClassificacao(String classificacao) {
+        this.classificacao = classificacao;
+    }
+
+    public double getAno() {
+        return ano;
+    }
+
+    public void setAno(double ano) {
+        this.ano = ano;
     }
 }
