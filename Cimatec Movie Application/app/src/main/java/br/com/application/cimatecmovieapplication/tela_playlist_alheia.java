@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -28,8 +29,13 @@ public class tela_playlist_alheia extends AppCompatActivity {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    public ListView listViewFilmesDoAmigo;
     public TextView txtNomePlaylist, txtAutor;
     String autor_playlist, nome_playlist, id_autor;
+
+    ArrayList<ClassFilme> filmes;
+    ClassFilme filme;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +44,7 @@ public class tela_playlist_alheia extends AppCompatActivity {
 
         txtNomePlaylist = (TextView) findViewById(R.id.txtNomePlaylist);
         txtAutor =(TextView) findViewById(R.id.txtAutor);
+        listViewFilmesDoAmigo = (ListView) findViewById(R.id.listViewFilmesDoAmigo);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -77,7 +84,7 @@ public class tela_playlist_alheia extends AppCompatActivity {
                         System.out.println("Referências de playlist:");
                         for (DocumentReference ref : playlistRefs) {
                             //Apresentando na tela os filmes da lista
-                            mostrando_filmes_da_playlist(ref.getPath(), _id_user);
+                            mostrando_filmes_da_playlist(ref.getPath());
                             System.out.println(ref.getPath());
                         }
                     }
@@ -87,8 +94,6 @@ public class tela_playlist_alheia extends AppCompatActivity {
                 }
             }
         });
-
-
     }
 
     private class MinhaAsyncTask extends AsyncTask<Void, Void, Boolean> {
@@ -105,10 +110,9 @@ public class tela_playlist_alheia extends AppCompatActivity {
         }
     }
 
-    public void mostrando_filmes_da_playlist(String filmeRef, String _id){
-        // Obtém uma referência para o documento "Filmes/qFAVz9n4kgbdXJrVpUZZ"
+    public void mostrando_filmes_da_playlist(String filmeRef){
+        filmes = new ArrayList<>();
         DocumentReference ref = db.document(filmeRef);
-
         // Busca o documento referenciado pela referência
         ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -116,15 +120,21 @@ public class tela_playlist_alheia extends AppCompatActivity {
                 if (documentSnapshot.exists()) {
                     // O documento existe, você pode acessar os dados usando o objeto DocumentSnapshot
                     String titulo = documentSnapshot.getString("Titulo");
-                    String diretor = documentSnapshot.getString("Genero");
-                    //int ano = documentSnapshot.getLong("ano").intValue();
+                    String genero = documentSnapshot.getString("Genero");
+                    String ano = documentSnapshot.getString("Ano");
+                    String classificacao = documentSnapshot.getString("Classificacao");
+                    String url_cartaz = documentSnapshot.getString("cartaz_url");
 
-                    System.out.println("Título: " + titulo);
-                    System.out.println("Genero: " + diretor);
-                    //System.out.println("Ano: " + ano);
+                    System.out.println(">> Título: " + titulo);
+
+                    filme = new ClassFilme(titulo, url_cartaz, genero, classificacao, ano);
+                    filmes.add(filme);
+
                 } else {
                     System.out.println("O documento não existe.");
                 }
+                AdapterTupla_Filmes adapter = new AdapterTupla_Filmes(getApplicationContext(), filmes);
+                listViewFilmesDoAmigo.setAdapter(adapter);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -134,5 +144,4 @@ public class tela_playlist_alheia extends AppCompatActivity {
             }
         });
     }
-
 }

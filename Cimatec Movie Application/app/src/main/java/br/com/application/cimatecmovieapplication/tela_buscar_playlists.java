@@ -1,7 +1,5 @@
 package br.com.application.cimatecmovieapplication;
 
-import static android.content.ContentValues.TAG;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,26 +9,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentId;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 public class tela_buscar_playlists extends AppCompatActivity {
 
@@ -45,7 +33,7 @@ public class tela_buscar_playlists extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tela_buscar_playlists);
 
-        listViewPlayListsAmigos = (ListView) findViewById(R.id.listViewPlayListsAmigos);
+        listViewPlayListsAmigos = (ListView) findViewById(R.id.listViewFilmesDoAmigo);
 
         listViewPlayListsAmigos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
