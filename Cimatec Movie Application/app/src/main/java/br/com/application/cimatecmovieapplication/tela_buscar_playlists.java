@@ -47,6 +47,18 @@ public class tela_buscar_playlists extends AppCompatActivity {
 
         listViewPlayListsAmigos = (ListView) findViewById(R.id.listViewPlayListsAmigos);
 
+        listViewPlayListsAmigos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //Toast.makeText(tela_buscar_playlists.this, "Item " + i, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(tela_buscar_playlists.this, tela_playlist_alheia.class);
+                intent.putExtra("NOME_AUTOR", playLists.get(i).getAutor());
+                intent.putExtra("NOME_PLAYLIST", playLists.get(i).getNome_playlist());
+                intent.putExtra("ID_AUTOR", playLists.get(i).getId());
+                startActivity(intent);
+            }
+        });
+
         MinhaAsyncTask task = new MinhaAsyncTask();
         task.execute();
 

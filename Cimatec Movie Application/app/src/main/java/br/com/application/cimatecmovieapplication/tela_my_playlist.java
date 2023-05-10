@@ -34,17 +34,5 @@ public class tela_my_playlist extends AppCompatActivity {
             }
         });
 
-        //listarFilmes();
-
     }
-
-    void listarFilmes(){
-        for(int i = 0; i<10; i++){
-            ClassFilme f = new ClassFilme("Titulo", "URL", "GENERO", "LIVRE", "2000");
-            filmes.add(f);
-        }
-        ArrayAdapter adapter = new AdapterTupla_Filmes(this, filmes);
-        listViewMyList.setAdapter(adapter);
-    }
-
 }

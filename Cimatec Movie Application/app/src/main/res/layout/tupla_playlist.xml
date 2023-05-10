@@ -65,7 +65,9 @@
                 android:text="Curtir"
                 android:textSize="8sp"
                 android:textStyle="bold"
-                app:icon="@drawable/ic_like" />
+                app:icon="@drawable/ic_like"
+                android:focusable="false"
+                />
 
         </LinearLayout>
 
