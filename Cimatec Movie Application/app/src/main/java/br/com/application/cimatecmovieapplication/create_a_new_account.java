@@ -40,11 +40,11 @@ public class create_a_new_account extends AppCompatActivity {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    public EditText inputName, inputRA;
+    public EditText inputName, inputRA, inputSenha;
     public Button btCreate;
     int id_user_bd;
 
-    String _ra, _name;
+    String _ra, _name, _senha;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +52,7 @@ public class create_a_new_account extends AppCompatActivity {
         setContentView(R.layout.activity_create_anew_account);
 
         inputName = (EditText) findViewById(R.id.inputName);
+        inputSenha = (EditText) findViewById(R.id.inputSenha);
         inputRA = (EditText) findViewById(R.id.inputRA);
         btCreate = (Button) findViewById(R.id.btCreate);
 
@@ -60,7 +61,8 @@ public class create_a_new_account extends AppCompatActivity {
             public void onClick(View view) {
                 _ra = inputRA.getText().toString();
                 _name = inputName.getText().toString();
-                if(!TextUtils.isEmpty(_ra) && !TextUtils.isEmpty(_name)){
+                _senha = inputSenha.getText().toString();
+                if(!TextUtils.isEmpty(_ra) && !TextUtils.isEmpty(_name) && !TextUtils.isEmpty(_senha)){
                     MinhaAsyncTask task = new MinhaAsyncTask();
                     task.execute();
                 }
@@ -104,6 +106,7 @@ public class create_a_new_account extends AppCompatActivity {
         Map<String, Object> user = new HashMap<>();
         user.put("nome", _name);
         user.put("ra", _ra);
+        user.put("senha", _senha);
         user.put("curtidas", 0);
         user.put("playlist", Arrays.asList());
         user.put("data_cadastro", FieldValue.serverTimestamp());
@@ -126,6 +129,7 @@ public class create_a_new_account extends AppCompatActivity {
 
         inputName.setText("");
         inputRA.setText("");
+        inputSenha.setText("");
         finish();
         Toast.makeText(create_a_new_account.this, "Cadastrado com sucesso.", Toast.LENGTH_SHORT).show();
     }

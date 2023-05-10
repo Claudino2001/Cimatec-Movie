@@ -52,6 +52,17 @@
             android:hint="@string/type_your_ra"
             android:inputType="text" />
 
+        <EditText
+            android:id="@+id/inputSenha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="50dp"
+            android:ems="10"
+            android:hint="Password"
+            android:inputType="textPassword" />
+
         <Button
             android:id="@+id/btCreate"
             android:layout_width="match_parent"
