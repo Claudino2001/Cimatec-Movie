@@ -6,4 +6,40 @@
     android:layout_height="match_parent"
     tools:context=".tela_playlist_alheia">
 
+    <LinearLayout
+        android:layout_width="409dp"
+        android:layout_height="729dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/txtNomePlaylist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:text="@string/search_playLists"
+            android:textAlignment="center"
+            android:textColor="@color/red"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            tools:text="Nome da Playlist" />
+
+        <TextView
+            android:id="@+id/txtAutor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nome do autor"
+            android:textAlignment="center"
+            android:textSize="16sp" />
+
+        <ListView
+            android:id="@+id/listViewPlayListsAmigos"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

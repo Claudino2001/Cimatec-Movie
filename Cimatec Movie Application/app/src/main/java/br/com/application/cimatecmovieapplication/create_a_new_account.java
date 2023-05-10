@@ -109,6 +109,7 @@ public class create_a_new_account extends AppCompatActivity {
         user.put("senha", _senha);
         user.put("curtidas", 0);
         user.put("playlist", Arrays.asList());
+        user.put("nome_playlist", "PlayList de " + _name);
         user.put("data_cadastro", FieldValue.serverTimestamp());
 
         // Add a new document with a generated ID

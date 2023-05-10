@@ -16,20 +16,29 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentId;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class tela_buscar_playlists extends AppCompatActivity {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    CollectionReference usersRef = db.collection("Usuarios");
     public ListView listViewPlayListsAmigos;
-    ArrayList<ClassPlayList> playLists = new ArrayList<>();
+    ArrayList<ClassPlayList> playLists;
+    private static final String TAG = "MinhaActivityBuscarPlaylists";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +52,12 @@ public class tela_buscar_playlists extends AppCompatActivity {
 
     }
 
+
     void listar(){
         db.collection("Usuarios").
                 orderBy("nome").
                 addSnapshotListener(new EventListener<QuerySnapshot>() {
+
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value,
                                         @Nullable FirebaseFirestoreException e) {
@@ -54,37 +65,32 @@ public class tela_buscar_playlists extends AppCompatActivity {
                             Log.w(TAG, "Listen failed.", e);
                             return;
                         }
-
-                        List<String> cities = new ArrayList<>();
+                        playLists = new ArrayList<>();
+                        //DocumentReference playListref;
                         for (QueryDocumentSnapshot doc : value) {
-                            if (doc.get("nome") != null) {
-                                cities.add(doc.getString("nome"));
+                            if (doc.get("playlist") != null) {
+                                ClassPlayList p;
+                                System.out.println("\nID DO user: " + doc.getId());
+                                System.out.println("Nome da PlayList: " + doc.getString("nome_playlist"));
+                                System.out.println("Numéro de curtidas: " + doc.getDouble("curtidas"));
+                                System.out.println("Nome do criador: " + doc.getString("nome"));
+                                Double doubleNum = doc.getDouble("curtidas");
+                                int curtidas = doubleNum.intValue();
+                                p = new ClassPlayList(doc.getString("nome_playlist"), doc.getString("nome"), curtidas);
+                                p.setId(doc.getId());
+                                playLists.add(p);
                             }
                         }
-                        System.out.println("\n\n\n");
-                        Log.d(TAG, "\n\n\nUsuarios: " + cities);
-                        System.out.println("\n\n\n");
+                        AdapterTupla_PlayList adapter = new AdapterTupla_PlayList(getApplicationContext(), playLists);
+                        listViewPlayListsAmigos.setAdapter(adapter);
                     }
                 });
-
-
-
-
-//        for(int i = 0; i<10; i++){
-//            ClassPlayList p = new ClassPlayList("Nome da PlayList", "Gabriel Claudino", null, 10);
-//            playLists.add(p);
-//        }
-//
-//        ArrayAdapter adapter = new AdapterTupla_PlayList(this, playLists);
-//        listViewPlayListsAmigos.setAdapter(adapter);
-
     }
 
     private class MinhaAsyncTask extends AsyncTask<Void, Void, Boolean> {
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-
             try {
                 listar();
                 return true;
