@@ -44,7 +44,7 @@ public class AdapterTupla_Filmes extends ArrayAdapter<ClassFilme> {
 
         URL url;
         try {
-            url = new URL(filmes.get(position).url_cartaz);
+            url = new URL(filmes.get(position).getUrl_cartaz());
         } catch (MalformedURLException e) {
             Toast.makeText(context, "erro: img" + position, Toast.LENGTH_SHORT).show();
             throw new RuntimeException(e);
@@ -54,7 +54,7 @@ public class AdapterTupla_Filmes extends ArrayAdapter<ClassFilme> {
 
         titulo.setText(filmes.get(position).getTitulo());
         classificacao.setText(filmes.get(position).getClassificacao());
-        ano.setText(String.valueOf(filmes.get(position).getAno()));
+        ano.setText(filmes.get(position).getAno());
         genero.setText(filmes.get(position).getGenero());
 
         return rowView;

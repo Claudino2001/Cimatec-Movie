@@ -11,13 +11,13 @@ public class ClassPlayList {
 
     private String nome_playlist;
     private String autor;
-    private List<ClassFilme> filmes;
+    private List<String> filmes;
     private int curtidas;
 
     public ClassPlayList() {
     }
 
-    public ClassPlayList(String nome_playlist, String autor, List<ClassFilme> filmes, int curtidas) {
+    public ClassPlayList(String nome_playlist, String autor, List<String> filmes, int curtidas) {
         this.nome_playlist = nome_playlist;
         this.autor = autor;
         this.filmes = filmes;
@@ -40,11 +40,11 @@ public class ClassPlayList {
         this.autor = autor;
     }
 
-    public List<ClassFilme> getFilmes() {
+    public List<String> getFilmes() {
         return filmes;
     }
 
-    public void setFilmes(List<ClassFilme> filmes) {
+    public void setFilmes(List<String> filmes) {
         this.filmes = filmes;
     }
 

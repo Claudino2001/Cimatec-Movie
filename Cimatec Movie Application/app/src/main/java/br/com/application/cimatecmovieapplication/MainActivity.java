@@ -125,4 +125,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        inputNome.setText("");
+        inputSenha2.setText("");
+    }
+
 }

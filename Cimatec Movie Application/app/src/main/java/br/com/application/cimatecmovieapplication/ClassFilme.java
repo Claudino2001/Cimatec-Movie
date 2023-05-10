@@ -4,17 +4,17 @@ import android.widget.ImageView;
 
 public class ClassFilme {
 
-    String _id;
-    String titulo;
-    String url_cartaz;
-    String genero;
-    String classificacao;
-    double ano;
+    private String _id;
+    private String titulo;
+    private String url_cartaz;
+    private String genero;
+    private String classificacao;
+    private String ano;
 
     public ClassFilme() {
     }
 
-    public ClassFilme(String titulo, String url_cartaz, String genero, String classificacao, double ano) {
+    public ClassFilme(String titulo, String url_cartaz, String genero, String classificacao, String ano) {
         this.titulo = titulo;
         this.url_cartaz = url_cartaz;
         this.genero = genero;
@@ -62,11 +62,11 @@ public class ClassFilme {
         this.classificacao = classificacao;
     }
 
-    public double getAno() {
+    public String getAno() {
         return ano;
     }
 
-    public void setAno(double ano) {
+    public void setAno(String ano) {
         this.ano = ano;
     }
 }

@@ -42,7 +42,7 @@ public class Lista_de_filmes_no_banco extends AppCompatActivity {
 
     public void listarFIlmes(){
         listFilmes = new ArrayList<ClassFilme>();
-        db.collection("Filmes")
+        db.collection("Filmes").orderBy("Titulo")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -54,7 +54,7 @@ public class Lista_de_filmes_no_banco extends AppCompatActivity {
                                 filme.set_id(document.getId());
                                 filme.setTitulo(document.getString("Titulo"));
                                 filme.setClassificacao(document.getString("Classificacao"));
-                                filme.setAno(document.getDouble("Ano"));
+                                filme.setAno(document.getString("Ano"));
                                 filme.setUrl_cartaz(document.getString("cartaz_url"));
                                 filme.setGenero(document.getString("Genero"));
                                 listFilmes.add(filme);
