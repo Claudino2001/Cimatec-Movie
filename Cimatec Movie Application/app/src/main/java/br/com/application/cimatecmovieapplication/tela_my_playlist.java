@@ -3,6 +3,7 @@ package br.com.application.cimatecmovieapplication;
 import static android.content.ContentValues.TAG;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,10 +25,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -53,11 +58,6 @@ public class tela_my_playlist extends AppCompatActivity {
         btAddFilme = (FloatingActionButton) findViewById(R.id.btAddFilme);
 
         acessarKey_user();
-
-//        Bundle extras = getIntent().getExtras();
-//        if (extras != null) {
-//            _id = extras.getString("key_user");
-//        }
 
         System.out.println("\n\n\n\n\n\n>>>>>>>>>> id tela my playlist BANCOOOO" + _id);
 
@@ -108,25 +108,27 @@ public class tela_my_playlist extends AppCompatActivity {
     }
 
     public void deletarFilme(int position) {
+        // Obter o filme a ser removido
+        ClassFilme filmeRemovido = listFilmes.get(position);
+        String idFilmeRemovido = filmeRemovido.get_id();
+
         // Obter a referência do documento do usuário atual
         DocumentReference userRef = db.collection("Usuarios").document(_id);
 
-        // Atualizar a lista localmente removendo a referência na posição especificada
+        // Remover o filme da lista localmente
         listFilmes.remove(position);
 
-        List<DocumentReference> filmesRef = new ArrayList<DocumentReference>();
-        for(ClassFilme f : listFilmes){
-            String str = "Filmes/" + f.get_id();
-            DocumentReference doc = db.document(str);
-            filmesRef.add(doc);
-        }
         // Atualizar o documento no Firestore com a lista atualizada
-        userRef.update("playlist", filmesRef)
+        userRef.update("playlist", FieldValue.arrayRemove(db.collection("Filmes").document(idFilmeRemovido)))
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         // A atualização foi bem sucedida
                         Log.d(TAG, "Referência removida com sucesso");
+
+                        // Notificar o adaptador sobre a alteração nos dados
+                        AdapterTupla_Filmes adapter = (AdapterTupla_Filmes) listViewMyList.getAdapter();
+                        adapter.notifyDataSetChanged();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -134,66 +136,94 @@ public class tela_my_playlist extends AppCompatActivity {
                     public void onFailure(@NonNull Exception e) {
                         // A atualização falhou
                         Log.w(TAG, "Erro ao remover a referência", e);
+
+                        // Adicionar o filme de volta à lista local (rollback)
+                        listFilmes.add(position, filmeRemovido);
+
+                        // Notificar o adaptador sobre a alteração nos dados
+                        AdapterTupla_Filmes adapter = (AdapterTupla_Filmes) listViewMyList.getAdapter();
+                        adapter.notifyDataSetChanged();
                     }
                 });
-        listarFilmes();
     }
 
-
     public void listarFilmes() {
-        listFilmes = new ArrayList<ClassFilme>();
+        listFilmes = new ArrayList<>();
+
         db.collection("Usuarios")
                 .document(_id)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                List<DocumentReference> playlist = (List<DocumentReference>) document.get("playlist");
+                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            // Ocorreu um erro ao ouvir as atualizações
+                            Log.e(TAG, "Erro ao ouvir as atualizações do documento", e);
+                            return;
+                        }
+
+                        if (documentSnapshot != null && documentSnapshot.exists()) {
+                            List<DocumentReference> playlist = (List<DocumentReference>) documentSnapshot.get("playlist");
+                            if (playlist != null) {
+                                List<Task<DocumentSnapshot>> tasks = new ArrayList<>();
+
+                                // Limpar a lista de filmes antes de adicioná-los novamente
+                                listFilmes.clear();
+
                                 for (DocumentReference filmeRef : playlist) {
-                                    filmeRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                            if (task.isSuccessful()) {
-                                                DocumentSnapshot filmeDoc = task.getResult();
-                                                if (filmeDoc.exists()) {
-                                                    ClassFilme filme = new ClassFilme();
-                                                    filme.set_id(filmeDoc.getId());
-                                                    filme.setTitulo(filmeDoc.getString("Titulo"));
-                                                    filme.setClassificacao(filmeDoc.getString("Classificacao"));
-                                                    filme.setAno(filmeDoc.getString("Ano"));
-                                                    filme.setUrl_cartaz(filmeDoc.getString("cartaz_url"));
-                                                    filme.setGenero(filmeDoc.getString("Genero"));
-                                                    listFilmes.add(filme);
-                                                    System.out.println("\n\n\n\n\n>>>>> " + listFilmes.size());
-                                                    AdapterTupla_Filmes adapter = new AdapterTupla_Filmes(getApplicationContext(), listFilmes);
-                                                    listViewMyList.setAdapter(adapter);
-                                                } else {
-                                                    Log.d(TAG, "Filme não encontrado!");
-                                                }
-                                            } else {
-                                                Log.d(TAG, "Erro ao buscar filme!", task.getException());
-                                            }
-                                        }
-                                    });
+                                    Task<DocumentSnapshot> task = filmeRef.get();
+                                    tasks.add(task);
                                 }
+
+                                Tasks.whenAllSuccess(tasks)
+                                        .addOnSuccessListener(new OnSuccessListener<List<Object>>() {
+                                            @Override
+                                            public void onSuccess(List<Object> results) {
+                                                for (Object result : results) {
+                                                    DocumentSnapshot filmeDoc = (DocumentSnapshot) result;
+                                                    if (filmeDoc.exists()) {
+                                                        ClassFilme filme = new ClassFilme();
+                                                        filme.set_id(filmeDoc.getId());
+                                                        filme.setTitulo(filmeDoc.getString("Titulo"));
+                                                        filme.setClassificacao(filmeDoc.getString("Classificacao"));
+                                                        filme.setAno(filmeDoc.getString("Ano"));
+                                                        filme.setUrl_cartaz(filmeDoc.getString("cartaz_url"));
+                                                        filme.setGenero(filmeDoc.getString("Genero"));
+                                                        listFilmes.add(filme);
+                                                    } else {
+                                                        Log.d(TAG, "Filme não encontrado!");
+                                                    }
+                                                }
+
+                                                // Atualizar a ListView com os filmes
+                                                AdapterTupla_Filmes adapter = new AdapterTupla_Filmes(getApplicationContext(), listFilmes);
+                                                listViewMyList.setAdapter(adapter);
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                // Ocorreu um erro ao buscar os filmes
+                                                Log.e(TAG, "Erro ao buscar os filmes", e);
+                                            }
+                                        });
                             } else {
-                                Log.d(TAG, "Documento não encontrado!");
+                                // Limpar a lista de filmes se a playlist estiver vazia
+                                listFilmes.clear();
+
+                                // Atualizar a ListView vazia
+                                AdapterTupla_Filmes adapter = new AdapterTupla_Filmes(getApplicationContext(), listFilmes);
+                                listViewMyList.setAdapter(adapter);
                             }
                         } else {
-                            Log.d(TAG, "Erro ao buscar documento!", task.getException());
+                            Log.d(TAG, "Documento não encontrado!");
                         }
                     }
                 });
     }
 
     private class MinhaAsyncTask extends AsyncTask<Void, Void, Boolean> {
-
         @Override
         protected Boolean doInBackground(Void... voids) {
-
             try {
                 listarFilmes();
                 return true;
@@ -203,6 +233,7 @@ public class tela_my_playlist extends AppCompatActivity {
             }
         }
     }
+
 
     public void acessarKey_user(){
         try{
@@ -223,4 +254,11 @@ public class tela_my_playlist extends AppCompatActivity {
         }
     }
 
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        listFilmes.clear();
+//        MinhaAsyncTask task = new MinhaAsyncTask();
+//        task.execute();
+//    }
 }
