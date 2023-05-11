@@ -18,6 +18,7 @@ public class tela_my_playlist extends AppCompatActivity {
     public FloatingActionButton btAddFilme;
     public ListView listViewMyList;
     ArrayList<ClassFilme> filmes = new ArrayList<>();
+    String _id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,10 +28,19 @@ public class tela_my_playlist extends AppCompatActivity {
         listViewMyList = (ListView) findViewById(R.id.listViewMyList);
         btAddFilme = (FloatingActionButton) findViewById(R.id.btAddFilme);
 
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            _id = extras.getString("key_user");
+        }
+
+        System.out.println("id tela my playlist");
+
         btAddFilme.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(tela_my_playlist.this, Lista_de_filmes_no_banco.class));
+                Intent intent = new Intent(tela_my_playlist.this, Lista_de_filmes_no_banco.class);
+                intent.putExtra("key_user", _id);
+                startActivity(intent);
             }
         });
 

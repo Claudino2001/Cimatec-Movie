@@ -63,7 +63,7 @@ public class tela_buscar_playlists extends AppCompatActivity {
                                         @Nullable FirebaseFirestoreException e) {
                         if (e != null) {
                             Log.w(TAG, "Listen failed.", e);
-                            return;
+                            //return false;
                         }
                         playLists = new ArrayList<>();
                         //DocumentReference playListref;
@@ -83,6 +83,7 @@ public class tela_buscar_playlists extends AppCompatActivity {
                         }
                         AdapterTupla_PlayList adapter = new AdapterTupla_PlayList(getApplicationContext(), playLists);
                         listViewPlayListsAmigos.setAdapter(adapter);
+                        //return false;
                     }
                 });
     }

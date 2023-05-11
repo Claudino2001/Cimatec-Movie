@@ -72,7 +72,7 @@ public class tela_playlist_alheia extends AppCompatActivity {
                                 @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
                     Log.w(TAG, "Listen failed.", e);
-                    return;
+                    //return false;
                 }
 
                 if (snapshot != null && snapshot.exists()) {
@@ -85,13 +85,14 @@ public class tela_playlist_alheia extends AppCompatActivity {
                         for (DocumentReference ref : playlistRefs) {
                             //Apresentando na tela os filmes da lista
                             mostrando_filmes_da_playlist(ref.getPath());
-                            System.out.println(ref.getPath());
+                            System.out.println("\n\n\n\n"+ref.getPath());
                         }
                     }
 
                 } else {
                     Log.d(TAG, "Current data: null");
                 }
+                //return false;
             }
         });
     }

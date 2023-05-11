@@ -12,7 +12,6 @@ public class tela_menu extends AppCompatActivity {
 
     public Button btMyPlayList, btSearchPlayLists;
     public TextView txtTituloMenu;
-
     String key_user, name_user;
 
     @Override
@@ -35,7 +34,9 @@ public class tela_menu extends AppCompatActivity {
         btMyPlayList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(tela_menu.this, tela_my_playlist.class));
+                Intent intent = new Intent(tela_menu.this, tela_my_playlist.class);
+                intent.putExtra("key_user" ,key_user);
+                startActivity(intent);
             }
         });
 
