@@ -3,7 +3,11 @@ package br.com.application.cimatecmovieapplication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -33,7 +37,6 @@ import java.util.Collection;
 public class MainActivity extends AppCompatActivity {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-
     public TextView btnCriarConta;
     public EditText inputRA, inputNome, inputSenha2;
     public Button btLogin;
@@ -41,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
     String _ra, _name, _senha;
     String key_user;
     String name_user;
+
+    private SQLiteDatabase banco;
+    private static final String DATABASE_NAME = "dbCimatecMovie";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
         //inputRA = (EditText) findViewById(R.id.inputRA);
         inputNome = (EditText) findViewById(R.id.inputNome);
         inputSenha2 = (EditText) findViewById(R.id.inputSenha2);
+
+        criarBanco();
 
         btnCriarConta.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,16 +120,44 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean resultado) {
             if(resultado){
+                System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + key_user);
                 Toast.makeText(getApplicationContext(), "Acesso concedido.", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, tela_menu.class);
                 //System.out.println("\n\n\nCONFIRMANDO QUE N TA VAZIO: " + key_user + "\n\n\n\n");
                 intent.putExtra("key_user", key_user);
                 intent.putExtra("name_user", name_user);
                 startActivity(intent);
+                inserKey_user();
             }else{
                 Toast.makeText(getApplicationContext(), "Acesso negado. Usuário não encontrado.", Toast.LENGTH_SHORT).show();
             }
 
+        }
+    }
+
+    public void criarBanco(){
+        try{
+            banco = openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
+            banco.execSQL("CREATE TABLE IF NOT EXISTS tb_key_user (key_user VARCHAR (100));");
+            banco.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void inserKey_user(){
+        try {
+            //alimentar banco com o key_user
+            banco = openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
+
+            String sql = "INSERT INTO tb_key_user(key_user) VALUES (?);";
+            SQLiteStatement stmt = banco.compileStatement(sql);
+            stmt.bindString(1, key_user.toString());
+            stmt.executeInsert();
+
+            banco.close();
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 

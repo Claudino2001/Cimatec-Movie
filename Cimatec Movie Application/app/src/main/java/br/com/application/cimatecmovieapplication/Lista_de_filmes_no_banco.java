@@ -8,6 +8,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -45,6 +47,9 @@ public class Lista_de_filmes_no_banco extends AppCompatActivity {
 
     boolean pode;
 
+    private SQLiteDatabase banco;
+    private static final String DATABASE_NAME = "dbCimatecMovie";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,11 +57,11 @@ public class Lista_de_filmes_no_banco extends AppCompatActivity {
 
         listadefilmes = (ListView) findViewById(R.id.listadefilmes);
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            _id = extras.getString("key_user");
-        }
-
+//        Bundle extras = getIntent().getExtras();
+//        if (extras != null) {
+//            _id = extras.getString("key_user");
+//        }
+        acessarKey_user();
         System.out.println("\n\n\n\nID_USER:::: " + _id);
 
         listadefilmes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -204,6 +209,26 @@ public class Lista_de_filmes_no_banco extends AppCompatActivity {
             });
         }
     }
+
+    public void acessarKey_user(){
+        try{
+            banco = openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
+
+            Cursor cursor = banco.rawQuery("SELECT key_user FROM tb_key_user;", null);
+
+            if(cursor.moveToFirst()){
+                do{
+                    _id = cursor.getString((int) cursor.getColumnIndex("key_user"));
+
+                }while (cursor.moveToNext());
+            }
+
+            banco.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 }
 
 
