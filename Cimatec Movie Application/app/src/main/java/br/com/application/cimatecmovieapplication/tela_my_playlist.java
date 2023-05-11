@@ -145,6 +145,7 @@ public class tela_my_playlist extends AppCompatActivity {
                         adapter.notifyDataSetChanged();
                     }
                 });
+        Toast.makeText(this, "Filme deletado.", Toast.LENGTH_SHORT).show();
     }
 
     public void listarFilmes() {

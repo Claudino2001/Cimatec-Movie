@@ -71,7 +71,7 @@ public class Lista_de_filmes_no_banco extends AppCompatActivity {
                 String str_titulo_filme = listFilmes.get(i).getTitulo();
                 String str_id_filme = listFilmes.get(i).get_id();
                 _id_filme = str_id_filme;
-                Toast.makeText(Lista_de_filmes_no_banco.this, str_titulo_filme, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(Lista_de_filmes_no_banco.this, str_titulo_filme, Toast.LENGTH_SHORT).show();
                 solicitarConfirmacao(str_titulo_filme, str_id_filme);
 
             }
@@ -164,7 +164,7 @@ public class Lista_de_filmes_no_banco extends AppCompatActivity {
                         String filmeComp = "Filmes/" + id;
                         System.out.println(filmeComp + " " + numFilmesPlaylist);
                         System.out.println(filmeComp+"\n"+refPath);
-                        if ((refPath.equals(filmeComp)) || numFilmesPlaylist >= 4) {
+                        if ((refPath.equals(filmeComp)) || numFilmesPlaylist >= 5) {
                             return false;
                         }
                     }
